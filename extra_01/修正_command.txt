@@ -1,0 +1,36 @@
+# 商品テーブルの作成
+CREATE TABLE IF NOT EXISTS goods (
+    id iNT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    go_name VARCHAR(60) NOT NULL,
+    price INT NOT NULL
+);
+
+# 商品テーブルにレコードを追加
+INSERT INTO goods (id, go_name, price) VALUES
+	(1001, '消しゴム', 350),
+    (1002, 'ボールペン', 500),
+    (1003, 'サインペン', 800),
+    (1004, '万年筆', 1000);
+
+# 注文テーブルを作成＆外部キーの設定
+CREATE TABLE IF NOT EXISTS ordering (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ord_id INT NOT NULL,
+    ord_name VARCHAR(60) NOT NULL,
+    go_id INT NOT NULL,
+    ord_date DATE NOT NULL,
+    FOREIGN KEY (go_id) REFERENCES goods(id)
+);
+
+# 注文テーブルにレコードを追加
+INSERT INTO ordering(ord_id, ord_name, go_id, ord_date) VALUES
+	(5001, '侍太郎', 1002, '2024/11/30'),
+    (5002, '侍二郎', 1003, '2024/07/30'),
+    (5003, '侍三郎', 1001, '2024/10/31'),
+    (5004, '侍四郎', 1004, '2024/09/04');
+    
+# テーブル結合
+SELECT goods.go_name, ordering.ord_name, ordering.ord_date, goods.price
+FROM goods
+LEFT OUTER JOIN ordering ON goods.id = ordering.go_id
+WHERE price >= 500 ;
